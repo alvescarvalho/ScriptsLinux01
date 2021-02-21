@@ -27,16 +27,15 @@ trava2="/var/cache/apt/archives/lock"
 #Adicionando suporte a 32bits
 suporte="dpkg --add-architecture i386"
 
-#Chaves do Wine
-chaves=(winehq.key)
-
-#Repositórios
-repositorios=(
-    "deb https://dl.winehq.org/wine-builds/ubuntu/ focal main"
-
+#Download da chave do wine
+down_chave=(
+    "https://dl.winehq.org/wine-builds/winehq.key"
 )
-#Atualizar o sistema
-atualiza_sistema="apt update"
+#Chaves do Wine
+chave=(winehq.key)
+
+#Repositório Wine
+repo_wine=("deb https://dl.winehq.org/wine-builds/ubuntu/ focal main")
 
 #Lista de PPAs
 ppa_lutris="ppa:lutris-team/lutris"
@@ -46,27 +45,24 @@ ppa_java="ppa:linuxuprising/java"
 
 #Downloads de programas via WGET 
 downloads=(
-    "https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb"
-    "https://download3.operacdn.com/pub/opera/desktop/74.0.3911.154/linux/opera-stable_74.0.3911.154_amd64.deb"
-    "https://linux.dropbox.com/packages/ubuntu/dropbox_2020.03.04_amd64.deb"
-    "https://mega.nz/linux/MEGAsync/xUbuntu_20.04/amd64/megasync-xUbuntu_20.04_amd64.deb"
-    "https://mega.nz/linux/MEGAsync/xUbuntu_20.04/amd64/dolphin-megasync-xUbuntu_20.04_amd64.deb"
-    "https://dl.discordapp.net/apps/linux/0.0.13/discord-0.0.13.deb"
-    "https://downloads.vivaldi.com/stable/vivaldi-stable_3.6.2165.40-1_amd64.deb"
-    "https://download.virtualbox.org/virtualbox/6.1.18/virtualbox-6.1_6.1.18-142142~Ubuntu~eoan_amd64.deb"
-    "https://sonik.dl.sourceforge.net/project/stacer/v1.1.0/stacer_1.1.0_amd64.deb"
-    "https://az764295.vo.msecnd.net/stable/622cb03f7e070a9670c94bae1a45d78d7181fbd4/code_1.53.2-1613044664_amd64.deb"
+   # "https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb"
+   # "https://download3.operacdn.com/pub/opera/desktop/74.0.3911.154/linux/opera-stable_74.0.3911.154_amd64.deb"
+  "https://linux.dropbox.com/packages/ubuntu/dropbox_2020.03.04_amd64.deb"
+   # "https://mega.nz/linux/MEGAsync/xUbuntu_20.04/amd64/megasync-xUbuntu_20.04_amd64.deb"
+   # "https://mega.nz/linux/MEGAsync/xUbuntu_20.04/amd64/dolphin-megasync-xUbuntu_20.04_amd64.deb"
+   # "https://dl.discordapp.net/apps/linux/0.0.13/discord-0.0.13.deb"
+   # "https://downloads.vivaldi.com/stable/vivaldi-stable_3.6.2165.40-1_amd64.deb"
+   # "https://download.virtualbox.org/virtualbox/6.1.18/virtualbox-6.1_6.1.18-142142~Ubuntu~eoan_amd64.deb"
+   # "https://sonik.dl.sourceforge.net/project/stacer/v1.1.0/stacer_1.1.0_amd64.deb"
+    #"https://az764295.vo.msecnd.net/stable/622cb03f7e070a9670c94bae1a45d78d7181fbd4/code_1.53.2-1613044664_amd64.deb"
 )
 
 #Download de programas compactados e zipados
- comprimidos=(
-    "https://releases.hashicorp.com/vagrant/2.2.14/vagrant_2.2.14_linux_amd64.zip"
-    "https://mirror.turbozoneinternet.net.br/tdf/libreoffice/stable/7.1.0/deb/x86_64/LibreOffice_7.1.0_Linux_x86-64_deb.tar.gz"
- )
+ vagrant=("https://releases.hashicorp.com/vagrant/2.2.14/vagrant_2.2.14_linux_amd64.zip")
+ libre=("https://mirror.turbozoneinternet.net.br/tdf/libreoffice/stable/7.1.0/deb/x86_64/LibreOffice_7.1.0_Linux_x86-64_deb.tar.gz")
 
-# Diretório Temporário 
-cd $(mktemp -d)
-#diretorio_downloads="$HOME/softwaresposinstall"
+diretorio_arquivos_deb="$HOME/programas_do_script_pos_install"
+diretorio_compactados_zip="$HOME/programas_do_script_compactados_pos_install"
 
 #Remover programas desnecessários
 app_remover=(
@@ -133,124 +129,57 @@ app_install=(
 
 # ------------------------------------------------------------#
 # --------------------ÍNICIO DO SCRIPT------------------------#
-TIME=3
-while true; clear; 
-    do
-    echo " "
-    echo " "
-echo "Seja bem vindo ao script de automação Sr.$USER $0 do Kubuntu!"
-echo ""
-echo "Escolha uma opção abaixo para começar!"
-echo " 
-      1 - Adicionando Arquitetura em 32bits Ok
-      2 - Desinstalando Programas OK
-      3 - Adicionando Repositórios PPAs OK
-      4 - Atualizar o Sistema OK 
-      5 - Remover Travas Eventuais do APT ok
-      6 - Instalando Programas em  APT
-      7 - Instalando Programas em .DEB
-      8 - Instalando Programas em .AppImage
-      9 - Desisntalar Programas desnecessários
-      0 - Sair do sistema ok"  
-echo " "
-echo -n "Digite a opção escolhida:"
+TIME=2
+#Adicionando suporte a arquitetura em 32bits.
+    echo "Vamos adicionar o suporte a 32bits"
+    echo "Aguarde"
+    sleep $TIME
+    echo "Adicionando suporte a arquitetura em 32bits"
+    sudo ${suporte[@]}
+    clear
 
-read opcao 
-case $opcao in
-     1)        
-         echo "Adicionando suporte para arquitetura em 32bits em."
-         echo
-         sudo ${suporte[@]} 
-         echo "Perfeito adicionado a arquitetura em 32bits."
-         echo 
-         sudo  ${atualiza_sistema[@]}
-         clear
-         echo
-         echo "Perfeito, estamos voltando ao menu iniciar."
-         echo "Reiniciando menu em 3seg..."
-         sleep $TIME 
+#Agora vamos instalar o wine 
+    echo "Fazendo download da chave direto do site do wine"
+    sleep $TIME
+    wget -nc  ${down_chave[@]}
+    echo "Adicionando a chave no sistema"
+    sleep $TIME
+    sudo apt-key add ${chave[@]}
+    clear
+    echo " Adicionando o repositório do wine no linux"
+    sleep $TIME  
+   sudo apt-add-repository -r "$repo_wine" -y
+   echo "Feito esta instalado o repositório!"
+   clear
 
-     ;;
+#Atualizar o sistema
 
-     2)
-        echo "Certo estamos excluindo os programas que você pediu"
-        echo
-        sudo apt purge ${app_remover[@]} -y
-        clear
-        echo
-
-        
-     ;; 
-
-     3) 
-        echo " Instalando Repositórios PPAs"
-        echo
-        sudo add-apt-repository  "$ppa_lutris" -y
-        sudo add-apt-repository  "$ppa_retroarch" -y 
-        sudo add-apt-repository  "$ppa_kodi" -y
-        sudo add-apt-repository  "$ppa_java"  -y
-        echo
-        sudo apt update 
-        clear   
-        echo "Repositórios Instalados."
-        echo " Voltando ao menu..."
-        sleep $TIME
-    ;;
-
-    4)
-        echo " Atualizando o sistema"
-        echo
-        echo "Vamos atualizar agora as listas dos repositórios"
-        sleep $TIME
-        sudo apt update 
-
-    ;;
-
-    5)
-        echo "Removendo travas do APT "
-        sudo rm $trava1
-        sleep $TIME 
-        sudo rm $trava2
-        echo
-        echo "Voltando ao menu"
-        clear
-
-
-    
-    ;;
-    
-    6)
-        echo "Instalando programas em APT listados..."
-        echo
-        sleep $TIME
-        echo " Iniciando a instalação dos programas"
-        for nome_app in ${app_install[@]}; do 
-            if ! dpkg -l | grep -q $nome_app; then 
-            sudo apt install  "$nome_app" -y 
-            
-        else 
-            echo "[INSTALADO] -  $nome_app"
-        fi 
-done
+sudo apt update 
 clear
-;;
 
-    7) 
-        echo "Instalando aplicativos via WGET"
-        echo
-        sleep $TIME
-        echo "Iniciando."
-        mkdir "$diretorio_downloads" 
-        wget -c "$downloads" -P "$diretorio_downloads"
-;;
-    0)
+#Adicionando PPAs no sistema
 
-        echo "Certo saindo do sistema"
-        echo "Saindo do sistema em 3.2.1..."
-        sleep $TIME
-        clear
-        exit 1
-        
-    ;;
-esac
-done
+sudo apt-add-repository  -r ${ppa_retroarch[@]} -y 
+sudo apt-add-repository  -r ${ppa_lutris[@]} -y 
+sudo apt-add-repository  -r ${ppa_kodi[@]} -y 
+sudo apt-add-repository  -r ${ppa_java[@]} -y 
+
+#Atualizando ppas
+
+sudo apt update
+clear
+
+# Instalando programas via WGET 
+mkdir "$diretorio_arquivos_deb"
+wget -c "${downloads[@]}" -P "$diretorio_arquivos_deb"
+cd $HOME/programas_do_script_pos_install
+sudo dpkg -i *.deb
+cd $HOME/
+sudo rm -rf $HOME/programas_do_script_pos_install
+
+# Instalando arquivos compactados 
+mkdir "$diretorio_compactados_zip"
+cd $HOME/programas_do_script_compactados_pos_install
+#wget -c "${libre[@]}" -P "$diretorio_compactados_zip"
+wget -c "${vagrant[@]}" -P "$diretorio_compactados_zip"
+unzip  $HOME/programas_do_script_compactados_pos_install/*.zip
