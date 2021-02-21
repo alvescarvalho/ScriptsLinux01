@@ -19,7 +19,56 @@
 # -------------------------ÍNICIO -VARIÁVEIS------------------#
 # ------------------------------------------------------------#
 set -e 
-#PROGRAMAS PARA EXCLUIR 
+#
+#Removendo Travas do APT 
+trava1="/var/lib/dpkg/lock-frontend"
+trava2="/var/cache/apt/archives/lock"
+
+#Adicionando suporte a 32bits
+suporte="dpkg --add-architecture i386"
+
+#Chaves do Wine
+chaves=(winehq.key)
+
+#Repositórios
+repositorios=(
+    "deb https://dl.winehq.org/wine-builds/ubuntu/ focal main"
+
+)
+#Atualizar o sistema
+atualiza_sistema="apt update"
+
+#Lista de PPAs
+ppa_lutris="ppa:lutris-team/lutris"
+ppa_retroarch="ppa:libretro/stable"
+ppa_kodi="ppa:team-xbmc/ppa"
+ppa_java="ppa:linuxuprising/java"
+
+#Downloads de programas via WGET 
+downloads=(
+    "https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb"
+    "https://download3.operacdn.com/pub/opera/desktop/74.0.3911.154/linux/opera-stable_74.0.3911.154_amd64.deb"
+    "https://linux.dropbox.com/packages/ubuntu/dropbox_2020.03.04_amd64.deb"
+    "https://mega.nz/linux/MEGAsync/xUbuntu_20.04/amd64/megasync-xUbuntu_20.04_amd64.deb"
+    "https://mega.nz/linux/MEGAsync/xUbuntu_20.04/amd64/dolphin-megasync-xUbuntu_20.04_amd64.deb"
+    "https://dl.discordapp.net/apps/linux/0.0.13/discord-0.0.13.deb"
+    "https://downloads.vivaldi.com/stable/vivaldi-stable_3.6.2165.40-1_amd64.deb"
+    "https://download.virtualbox.org/virtualbox/6.1.18/virtualbox-6.1_6.1.18-142142~Ubuntu~eoan_amd64.deb"
+    "https://sonik.dl.sourceforge.net/project/stacer/v1.1.0/stacer_1.1.0_amd64.deb"
+    "https://az764295.vo.msecnd.net/stable/622cb03f7e070a9670c94bae1a45d78d7181fbd4/code_1.53.2-1613044664_amd64.deb"
+)
+
+#Download de programas compactados e zipados
+ comprimidos=(
+    "https://releases.hashicorp.com/vagrant/2.2.14/vagrant_2.2.14_linux_amd64.zip"
+    "https://mirror.turbozoneinternet.net.br/tdf/libreoffice/stable/7.1.0/deb/x86_64/LibreOffice_7.1.0_Linux_x86-64_deb.tar.gz"
+ )
+
+# Diretório Temporário 
+cd $(mktemp -d)
+#diretorio_downloads="$HOME/softwaresposinstall"
+
+#Remover programas desnecessários
 app_remover=(
     elisa 
     ktorrent 
@@ -32,7 +81,7 @@ app_remover=(
     kpat
 )   
 
-#PROGRAMAS PARA INSTALAR
+#Listas de programas para instalar 
 app_install=(
     arj 
     audacity
@@ -80,52 +129,7 @@ app_install=(
     uudeview
     zsh 
 )
-#REMOVENDO TRAVAS EVENTUAIS DO APT
-trava1="/var/lib/dpkg/lock-frontend"
-trava2="/var/cache/apt/archives/lock"
-
-#ATUALIZAR SISTEMA
-atualiza_sistema="apt update"
-
-#ADICIONANDO SUPORTE A 32bits
-suporte="dpkg --add-architecture i386"
-
-#PPAs
-ppa_lutris="ppa:lutris-team/lutris"
-ppa_retroarch="ppa:libretro/stable"
-ppa_kodi="ppa:team-xbmc/ppa"
-ppa_java="ppa:linuxuprising/java"
-
-#DOWNLOADS
-downloads=(
-    "https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb"
-    "https://dl.winehq.org/wine-builds/winehq.key"
-    "https://download3.operacdn.com/pub/opera/desktop/74.0.3911.154/linux/opera-stable_74.0.3911.154_amd64.deb"
-    "https://linux.dropbox.com/packages/ubuntu/dropbox_2020.03.04_amd64.deb"
-    "https://mega.nz/linux/MEGAsync/xUbuntu_20.04/amd64/megasync-xUbuntu_20.04_amd64.deb"
-    "https://mega.nz/linux/MEGAsync/xUbuntu_20.04/amd64/dolphin-megasync-xUbuntu_20.04_amd64.deb"
-    "https://dl.discordapp.net/apps/linux/0.0.13/discord-0.0.13.deb"
-    "https://downloads.vivaldi.com/stable/vivaldi-stable_3.6.2165.40-1_amd64.deb"
-    "https://download.virtualbox.org/virtualbox/6.1.18/virtualbox-6.1_6.1.18-142142~Ubuntu~eoan_amd64.deb"
-    "https://mirror.turbozoneinternet.net.br/tdf/libreoffice/stable/7.1.0/deb/x86_64/LibreOffice_7.1.0_Linux_x86-64_deb.tar.gz"
-    "https://sonik.dl.sourceforge.net/project/stacer/v1.1.0/stacer_1.1.0_amd64.deb"
-    "https://az764295.vo.msecnd.net/stable/622cb03f7e070a9670c94bae1a45d78d7181fbd4/code_1.53.2-1613044664_amd64.deb"
-    "https://releases.hashicorp.com/vagrant/2.2.14/vagrant_2.2.14_linux_amd64.zip"
-)
-#CHAVES
-chaves=(winehq.key)
-
-#REPOSITÓRIOS
-repositorios=(
-    "deb https://dl.winehq.org/wine-builds/ubuntu/ focal main"
-
-)
-
-# CRIANDO DIRETÓRIO TEMPORÁRIO 
-cd $(mktemp -d)
-# -------------------------FIM -VARIÁVEIS------------------#
-
-
+# -------------------- FIM -VARIÁVEIS-------------------------#
 
 # ------------------------------------------------------------#
 # --------------------ÍNICIO DO SCRIPT------------------------#
@@ -229,6 +233,15 @@ case $opcao in
         fi 
 done
 clear
+;;
+
+    7) 
+        echo "Instalando aplicativos via WGET"
+        echo
+        sleep $TIME
+        echo "Iniciando."
+        mkdir "$diretorio_downloads" 
+        wget -c "$downloads" -P "$diretorio_downloads"
 ;;
     0)
 
