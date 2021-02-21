@@ -138,7 +138,7 @@ TIME=2
     sudo ${suporte[@]}
     clear
 
-#Agora vamos instalar o wine 
+#Instalando WINE 
     echo "Fazendo download da chave direto do site do wine"
     sleep $TIME
     wget -nc  ${down_chave[@]}
@@ -159,10 +159,10 @@ clear
 
 #Adicionando PPAs no sistema
 
-sudo apt-add-repository  -r ${ppa_retroarch[@]} -y 
-sudo apt-add-repository  -r ${ppa_lutris[@]} -y 
-sudo apt-add-repository  -r ${ppa_kodi[@]} -y 
-sudo apt-add-repository  -r ${ppa_java[@]} -y 
+sudo apt-add-repository   ${ppa_retroarch[@]} -y 
+sudo apt-add-repository   ${ppa_lutris[@]} -y 
+sudo apt-add-repository   ${ppa_kodi[@]} -y 
+sudo apt-add-repository   ${ppa_java[@]} -y 
 
 #Atualizando ppas
 
