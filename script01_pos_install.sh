@@ -91,10 +91,10 @@ atualiza_sistema="apt update"
 suporte="dpkg --add-architecture i386"
 
 #PPAs
-ppa_lutris="lutris-team/lutris"
-ppa_retroarch="libretro/stable"
-ppa_kodi="team-xbmc/ppa"
-ppa_java="linuxuprising/java"
+ppa_lutris="ppa:lutris-team/lutris"
+ppa_retroarch="ppa:libretro/stable"
+ppa_kodi="ppa:team-xbmc/ppa"
+ppa_java="ppa:linuxuprising/java"
 
 #DOWNLOADS
 downloads=(
@@ -138,16 +138,16 @@ echo "Seja bem vindo ao script de automação Sr.$USER $0 do Kubuntu!"
 echo ""
 echo "Escolha uma opção abaixo para começar!"
 echo " 
-      1 - Adicionando Arquitetura em 32bits 
-      2 - Desisntalando Programas
-      3 - Adicionando Repositórios
-      4 - Atualizar o Sistema
-      5 - Remover Travas Eventuais do APT
+      1 - Adicionando Arquitetura em 32bits Ok
+      2 - Desinstalando Programas OK
+      3 - Adicionando Repositórios PPAs OK
+      4 - Atualizar o Sistema OK 
+      5 - Remover Travas Eventuais do APT ok
       6 - Instalando Programas em  APT
       7 - Instalando Programas em .DEB
       8 - Instalando Programas em .AppImage
       9 - Desisntalar Programas desnecessários
-      0 - Sair do sistema"
+      0 - Sair do sistema ok"  
 echo " "
 echo -n "Digite a opção escolhida:"
 
@@ -171,8 +171,73 @@ case $opcao in
      2)
         echo "Certo estamos excluindo os programas que você pediu"
         echo
-        sudo apt purge ${app_remover[@]} -y 
+        sudo apt purge ${app_remover[@]} -y
+        clear
+        echo
+
         
-     ;;              
+     ;; 
+
+     3) 
+        echo " Instalando Repositórios PPAs"
+        echo
+        sudo add-apt-repository  "$ppa_lutris" -y
+        sudo add-apt-repository  "$ppa_retroarch" -y 
+        sudo add-apt-repository  "$ppa_kodi" -y
+        sudo add-apt-repository  "$ppa_java"  -y
+        echo
+        sudo apt update 
+        clear   
+        echo "Repositórios Instalados."
+        echo " Voltando ao menu..."
+        sleep $TIME
+    ;;
+
+    4)
+        echo " Atualizando o sistema"
+        echo
+        echo "Vamos atualizar agora as listas dos repositórios"
+        sleep $TIME
+        sudo apt update 
+
+    ;;
+
+    5)
+        echo "Removendo travas do APT "
+        sudo rm $trava1
+        sleep $TIME 
+        sudo rm $trava2
+        echo
+        echo "Voltando ao menu"
+        clear
+
+
+    
+    ;;
+    
+    6)
+        echo "Instalando programas em APT listados..."
+        echo
+        sleep $TIME
+        echo " Iniciando a instalação dos programas"
+        for nome_app in ${app_install[@]}; do 
+            if ! dpkg -l | grep -q $nome_app; then 
+            sudo apt install  "$nome_app" -y 
+            
+        else 
+            echo "[INSTALADO] -  $nome_app"
+        fi 
+done
+clear
+;;
+    0)
+
+        echo "Certo saindo do sistema"
+        echo "Saindo do sistema em 3.2.1..."
+        sleep $TIME
+        clear
+        exit 1
+        
+    ;;
 esac
 done
