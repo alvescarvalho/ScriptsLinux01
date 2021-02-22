@@ -60,11 +60,14 @@ downloads=(
 #Download de programas compactados e zipados
  vagrant=("https://releases.hashicorp.com/vagrant/2.2.14/vagrant_2.2.14_linux_amd64.zip")
  libre=("https://mirror.turbozoneinternet.net.br/tdf/libreoffice/stable/7.1.0/deb/x86_64/LibreOffice_7.1.0_Linux_x86-64_deb.tar.gz")
-
+ libre_tradutor=("https://mirror.nbtelecom.com.br/tdf/libreoffice/stable/7.1.0/deb/x86_64/LibreOffice_7.1.0_Linux_x86-64_deb_langpack_pt-BR.tar.gz")   
+ libre_help=("http://mirror.ufms.br/tdf/libreoffice/stable/7.1.0/deb/x86_64/LibreOffice_7.1.0_Linux_x86-64_deb_helppack_pt-BR.tar.gz")
 #Diretorio onde serão armazenados os conteudos baixados
 diretorio_arquivos_deb="$HOME/programas_do_script_pos_install"
 diretorio_compactados_zip="$HOME/programas_do_script_compactados_pos_install"
 
+#Pasta onde ficará o livreoffice
+#libreoffice_pasta="$HOME/libreofficedescompactado"
 #Remover programas desnecessários
 app_remover=(
     elisa 
@@ -160,27 +163,89 @@ clear
 
 #Adicionando PPAs no sistema
 
-sudo apt-add-repository   ${ppa_retroarch[@]} -y 
-sudo apt-add-repository   ${ppa_lutris[@]} -y 
-sudo apt-add-repository   ${ppa_kodi[@]} -y 
-sudo apt-add-repository   ${ppa_java[@]} -y 
+sudo apt-add-repository    ${ppa_retroarch[@]} -y 
+sudo apt-add-repository    ${ppa_lutris[@]} -y 
+sudo apt-add-repository    ${ppa_kodi[@]} -y 
+sudo apt-add-repository    ${ppa_java[@]} -y 
 
 #Atualizando ppas
 
 sudo apt update
 clear
 
-# Instalando programas via WGET 
+# Instalando Programas via Wget  
+#
+    #Instalando todos os programas .deb
 mkdir "$diretorio_arquivos_deb"
 wget -c "${downloads[@]}" -P "$diretorio_arquivos_deb"
 cd $HOME/programas_do_script_pos_install
 sudo dpkg -i *.deb
+sudo apt install -f -y 
 cd $HOME/
 sudo rm -rf $HOME/programas_do_script_pos_install
 
-# Instalando arquivos compactados 
+##---------------------------------------------------##
+#
+# Instalando LibreOffice 7.1 e o Vagrant 
+#
+   # Criando diretório e fazendo download para dentro da pasta
 mkdir "$diretorio_compactados_zip"
 cd $HOME/programas_do_script_compactados_pos_install
-#wget -c "${libre[@]}" -P "$diretorio_compactados_zip"
 wget -c "${vagrant[@]}" -P "$diretorio_compactados_zip"
+wget -c "${libre[@]}" -P "$diretorio_compactados_zip"
+wget -c "${libre_tradutor[@]}" -P "$diretorio_compactados_zip"
+wget -c "${libre_help[@]}" -P "$diretorio_compactados_zip"
+   # Extraindo os arquivos do conteúdo zipado
 unzip  $HOME/programas_do_script_compactados_pos_install/*.zip
+tar -xzf LibreOffice_7.1.0_Linux_x86-64_deb.tar.gz 
+tar -xzf LibreOffice_7.1.0_Linux_x86-64_deb_langpack_pt-BR.tar.gz
+tar -xzf LibreOffice_7.1.0_Linux_x86-64_deb_helppack_pt-BR.tar.gz
+   # Instalando o LibreOffice 7.1
+cd $HOME/programas_do_script_compactados_pos_install/
+cd LibreOffice_7.1.0.3_Linux_x86-64_deb/DEBS/
+sudo dpkg -i *.deb
+   # Instalando o pacote de idiomas em português 
+cd $HOME/programas_do_script_compactados_pos_install 
+cd LibreOffice_7.1.0.3_Linux_x86-64_deb_langpack_pt-BR/DEBS
+sudo dpkg -i *.deb
+   # Instalando Pacote de Ajuda em Português 
+cd $HOME/programas_do_script_compactados_pos_install 
+cd LibreOffice_7.1.0.3_Linux_x86-64_deb_helppack_pt-BR/DEBS
+sudo dpkg -i *.deb
+   # Removendo pasta que contém os arquivos.
+sudo rm -rf "${diretorio_compactados_zip[@]}"
+
+##---------------------------------------------------##
+#
+# Instalando aplicativos APT
+echo "Instalando programas em APT listados..."
+        echo
+        sleep $TIME
+        echo " Iniciando a instalação dos programas"
+        for nome_app in ${app_install[@]}; do 
+            if ! dpkg -l | grep -q $nome_app; then 
+            sudo apt install  "$nome_app" -y 
+            
+        else 
+            echo "[INSTALADO] -  $nome_app"
+       fi 
+done
+
+# Removendo aplicativos do sistema 
+echo "Removendo programas desnecessários..."
+        echo
+        sleep $TIME
+        echo " Iniciando a remoção de programas"
+        for nome_app in ${app_remover[@]}; do 
+            if ! dpkg -l | grep -q $nome_app; then 
+            sudo apt purge  "$nome_app" -y 
+            
+        else 
+            echo "[REMOVIDO] -  $nome_app"
+        fi 
+done
+# Limpando o sistema
+
+sudo apt autoremove -y 
+sudo apt clean 
+sudo apt autoclean 
