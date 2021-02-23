@@ -40,11 +40,11 @@ downloads_deb=(
     "https://download.virtualbox.org/virtualbox/6.1.18/virtualbox-6.1_6.1.18-142142~Ubuntu~eoan_amd64.deb"
     "https://sonik.dl.sourceforge.net/project/stacer/v1.1.0/stacer_1.1.0_amd64.deb"
     "https://az764295.vo.msecnd.net/stable/622cb03f7e070a9670c94bae1a45d78d7181fbd4/code_1.53.2-1613044664_amd64.deb"
-    "https://github-releases.githubusercontent.com/93324270/409a3000-6c8c-11eb-9819-b24aced61f20?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAIWNJYAX4CSVEH53A%2F20210223%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20210223T053245Z&X-Amz-Expires=300&X-Amz-Signature=a6e6b8440351512cab1ff2bd6281b15e8943ed8629c0f084f21c5c7e7c28e208&X-Amz-SignedHeaders=host&actor_id=47837297&key_id=0&repo_id=93324270&response-content-disposition=attachment%3B%20filename%3DGitHubDesktop-linux-2.6.3-linux1.deb&response-content-type=application%2Foctet-stream"
+    "https://github.com/shiftkey/desktop/releases/download/release-2.6.3-linux1/GitHubDesktop-linux-2.6.3-linux1.deb"
 )
 #
 # 04 - Downloads Externos Compactados 
- vagrant=("https://releases.hashicorp.com/vagrant/2.2.14/vagrant_2.2.14_linux_amd64.zip")
+ #vagrant=("https://releases.hashicorp.com/vagrant/2.2.14/vagrant_2.2.14_linux_amd64.zip")
  libre=("https://mirror.turbozoneinternet.net.br/tdf/libreoffice/stable/7.1.0/deb/x86_64/LibreOffice_7.1.0_Linux_x86-64_deb.tar.gz")
  libre_tradutor=("https://mirror.nbtelecom.com.br/tdf/libreoffice/stable/7.1.0/deb/x86_64/LibreOffice_7.1.              0_Linux_x86-64_deb_langpackpt-BR.tar.gz")   
  libre_help=("http://mirror.ufms.br/tdf/libreoffice/stable/7.1.0/deb/x86_64/LibreOffice_7.1.0_Linux_x86-64_deb_helppack_pt-BR.tar.gz")
@@ -59,7 +59,7 @@ instalador_wine=("--install-recommends winehq-stable")
 app_install=(arj audacity cabextract cowsay figlet filezilla gconf-service gconf-service-backend gconf2-common gimp git gparted gufw handbrake hardinfo kazam kodi kodi-pvr-iptvsimple kodi-pvr-plutotv kubuntu-restricted-addons kubuntu-restricted-extras  libappindicator1 libatomic1 libc++1 libc++1-10 libc++abi1-10 libc-ares2 libdbusmenu-gtk4 libgconf-2-4 libmediainfo0v5 libpython2-stdlib libpython2.7-minimal libpython2.7-stdlib libzen0v5 lollypop lunzip lutris lzip mpack neofetch oracle-java15-installer oracle-java15-set-default p7zip p7zip-rar plzip python-is-python2 python2 python2-minimal python2.7 python2.7-minimal qbittorrent rar retroarch* samba sharutils simplescreenrecorder snapd software-properties-common synaptic telegram-desktop toilet transmission unace unrar uudeview zsh)
 #
 # 07 - Remover Programas 
-remover_programas=(elisa kmahjongg kmines konversation kpat ksudoku ktorrent libreoffice skanlite)   
+remover_programas=(elisa* kmahjongg* kmines* konversation* kpat* ksudoku* ktorrent* libreoffice* skanlite*)   
 #
 # 08 - Repositórios PPAs
 ppa_lutris="ppa:lutris-team/lutris"
@@ -71,7 +71,7 @@ ppa_java="ppa:linuxuprising/java"
 lock_apt1="/var/lib/dpkg/lock-frontend"
 lock_apt2="/var/cache/apt/archives/lock"
 lock_apt3="/var/lib/apt/lists/lock"
-lock_apt4="sudo rm /var/lib/dpkg/lock"
+lock_apt4="/var/lib/dpkg/lock"
 # ------------------------------------------------------------#
 # -----------------Ínicio do Código---------------------------#
 # ------------------------------------------------------------#
@@ -96,7 +96,7 @@ echo "Removendo Programas Listados..."
         sleep $TIME
         echo " Iniciando a remoção dos programas"
         for nome_do_programa in ${remover_programas[@]}; do 
-            if ! dpkg -l | grep -q $nome_do_programa; then 
+            if dpkg -l | grep -q $nome_do_programa; then 
             sudo apt purge  "$nome_do_programa" -y          
         else 
             echo "[Lista dos programas removidos] -  $nome_do_programa"
@@ -105,7 +105,7 @@ echo "Removendo Programas Listados..."
 done
 #
 # 00 - Limpar sistema.
-sudo apt autoremove 
+sudo apt autoremove -y 
 sudo apt autoclean
 sudo apt clean
 #
@@ -137,7 +137,7 @@ echo "Instalando programas em APT listados..."
             echo "[Instalado estes programas ao lado =>] -  $instalando_programa"
        fi 
 done
-#
+#   
 # 03 - Baixando programas .DEB pela internet 
 mkdir "$diretorio_deb"
 wget -c "${downloads_deb[@]}" -P "$diretorio_deb"
@@ -161,29 +161,32 @@ sudo apt update
 sudo apt install $instalador_wine -y 
 echo "Feito esta instalado o repositório!"
 #
-# 04 - Instalando o LibreOffice
-mkdir "$diretorio_compactados_zip"
+# 04 - Baixando o  Vagrant 
 #wget -c "${vagrant[@]}" -P "$diretorio_zip"
+
+# 04 - Instalando o LibreOffice
+mkdir "$diretorio_zip"
 wget -c "${libre[@]}" -P "$diretorio_zip"
 wget -c "${libre_tradutor[@]}" -P "$diretorio_zip"
 wget -c "${libre_help[@]}" -P "$diretorio_zip"
 cd $HOME/programas_zip
 # Extraindo Vagrant
 #unzip *.zip 
-#unzip  $HOME/programas_do_script_compactados_pos_install/*.zip
 tar -xzf LibreOffice_7.1.0_Linux_x86-64_deb.tar.gz 
 tar -xzf LibreOffice_7.1.0_Linux_x86-64_deb_langpack_pt-BR.tar.gz
 tar -xzf LibreOffice_7.1.0_Linux_x86-64_deb_helppack_pt-BR.tar.gz
+#unzip *.zip 
+#unzip  $HOME/programas_do_script_compactados_pos_install/*.zip
 # Instalando o LibreOffice 7.1
 cd LibreOffice_7.1.0.3_Linux_x86-64_deb/DEBS/
 sudo dpkg -i *.deb
 # Instalando o pacote de idiomas em português 
-cd $HOME/diretorio_zip 
-cd LibreOffice_7.1.0.3_Linux_x86-64_deb_langpack_pt-BR/DEBS
+cd $HOME/programas_zip 
+cd LibreOffice_7.1.0.3_Linux_x86-64_deb_langpack_pt-BR/DEBS/
 sudo dpkg -i *.deb
 # Instalando Pacote de Ajuda em Português 
-cd $HOME/diretorio_zip
-cd LibreOffice_7.1.0.3_Linux_x86-64_deb_helppack_pt-BR/DEBS
+cd $HOME/programas_zip
+cd LibreOffice_7.1.0.3_Linux_x86-64_deb_helppack_pt-BR/DEBS/
 sudo dpkg -i *.deb
 # Removendo pasta que contém os arquivos.
 cd $HOME/
