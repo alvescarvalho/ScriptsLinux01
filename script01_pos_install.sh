@@ -1,6 +1,4 @@
 #!/usr/bin/env bash
-#
-#
 # ------------------------------------------------------------#
 # Nome:          script01_pos_install.sh 
 # Descrição:     Automação de pós instalação do Kubntu 20.04.
@@ -16,35 +14,22 @@
 # ------------------------------------------------------------# 
 # Crescimento e evolução do Script v1.0
 # ------------------------------------------------------------#
-# -------------------------ÍNICIO -VARIÁVEIS------------------#
-# ------------------------------------------------------------#
-set -e 
 #
-#Removendo Travas do APT 
-trava1="/var/lib/dpkg/lock-frontend"
-trava2="/var/cache/apt/archives/lock"
-
-#Adicionando suporte a 32bits
-suporte="dpkg --add-architecture i386"
-
-#Download da chave do wine
-down_chave=(
-    "https://dl.winehq.org/wine-builds/winehq.key"
-)
-#Chaves do Wine
-chave=(winehq.key)
-
-#Repositório Wine
-repo_wine=("deb https://dl.winehq.org/wine-builds/ubuntu/ focal main")
-
-#Lista de PPAs
-ppa_lutris="ppa:lutris-team/lutris"
-ppa_retroarch="ppa:libretro/stable"
-ppa_kodi="ppa:team-xbmc/ppa"
-ppa_java="ppa:linuxuprising/java"
-
-#Downloads de programas via WGET 
-downloads=(
+#
+#
+# ------------------------------------------------------------#
+# -----------------Declaração de Variáveis--------------------#
+# ------------------------------------------------------------#
+#
+# 01 - Arquitetura em 32bits
+arquitetura="dpkg --add-architecture i386"
+#
+# 02 - Diretórios para Armazenamentos Arquivos Externos
+diretorio_deb="$HOME/programas_deb"
+diretorio_zip="$HOME/programas_zip"
+#
+# 03 - Downloads Externos
+downloads_deb=(
     "https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb"
     "https://download3.operacdn.com/pub/opera/desktop/74.0.3911.154/linux/opera-stable_74.0.3911.154_amd64.deb"
     "https://linux.dropbox.com/packages/ubuntu/dropbox_2020.03.04_amd64.deb"
@@ -55,198 +40,166 @@ downloads=(
     "https://download.virtualbox.org/virtualbox/6.1.18/virtualbox-6.1_6.1.18-142142~Ubuntu~eoan_amd64.deb"
     "https://sonik.dl.sourceforge.net/project/stacer/v1.1.0/stacer_1.1.0_amd64.deb"
     "https://az764295.vo.msecnd.net/stable/622cb03f7e070a9670c94bae1a45d78d7181fbd4/code_1.53.2-1613044664_amd64.deb"
+    "https://github-releases.githubusercontent.com/93324270/409a3000-6c8c-11eb-9819-b24aced61f20?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAIWNJYAX4CSVEH53A%2F20210223%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20210223T053245Z&X-Amz-Expires=300&X-Amz-Signature=a6e6b8440351512cab1ff2bd6281b15e8943ed8629c0f084f21c5c7e7c28e208&X-Amz-SignedHeaders=host&actor_id=47837297&key_id=0&repo_id=93324270&response-content-disposition=attachment%3B%20filename%3DGitHubDesktop-linux-2.6.3-linux1.deb&response-content-type=application%2Foctet-stream"
 )
-
-#Download de programas compactados e zipados
+#
+# 04 - Downloads Externos Compactados 
  vagrant=("https://releases.hashicorp.com/vagrant/2.2.14/vagrant_2.2.14_linux_amd64.zip")
  libre=("https://mirror.turbozoneinternet.net.br/tdf/libreoffice/stable/7.1.0/deb/x86_64/LibreOffice_7.1.0_Linux_x86-64_deb.tar.gz")
- libre_tradutor=("https://mirror.nbtelecom.com.br/tdf/libreoffice/stable/7.1.0/deb/x86_64/LibreOffice_7.1.0_Linux_x86-64_deb_langpack_pt-BR.tar.gz")   
+ libre_tradutor=("https://mirror.nbtelecom.com.br/tdf/libreoffice/stable/7.1.0/deb/x86_64/LibreOffice_7.1.              0_Linux_x86-64_deb_langpackpt-BR.tar.gz")   
  libre_help=("http://mirror.ufms.br/tdf/libreoffice/stable/7.1.0/deb/x86_64/LibreOffice_7.1.0_Linux_x86-64_deb_helppack_pt-BR.tar.gz")
-#Diretorio onde serão armazenados os conteudos baixados
-diretorio_arquivos_deb="$HOME/programas_do_script_pos_install"
-diretorio_compactados_zip="$HOME/programas_do_script_compactados_pos_install"
-
-#Pasta onde ficará o livreoffice
-#libreoffice_pasta="$HOME/libreofficedescompactado"
-#Remover programas desnecessários
-app_remover=(
-    elisa 
-    ktorrent 
-    konversation 
-    skanlite 
-    libreoffice* 
-    ksudoku 
-    kmahjongg 
-    kmines 
-    kpat
-)   
-
-#Listas de programas para instalar 
-app_install=(
-    arj 
-    audacity
-    cabextract 
-    cowsay
-    figlet 
-    filezilla
-    gimp
-    git 
-    gparted 
-    gufw 
-    handbrake 
-    hardinfo
-    kazam
-    kodi 
-    kodi-pvr-iptvsimple
-    kodi-pvr-plutotv 
-    kubuntu-restricted-addons 
-    kubuntu-restricted-extras
-    lollypop
-    lunzip
-    lutris
-    lzip 
-    mpack
-    neofetch 
-    oracle-java15-installer
-    oracle-java15-set-default
-    p7zip 
-    p7zip-rar 
-    plzip
-    qbittorrent
-    rar 
-    retroarch*
-    samba
-    sharutils 
-    simplescreenrecorder
-    snapd 
-    software-properties-common 
-    synaptic
-    telegram-desktop
-    toilet
-    transmission
-    unace
-    unrar
-    uudeview
-    zsh 
-)
-# -------------------- FIM -VARIÁVEIS-------------------------#
-
+#
+# 05 - Downloads do Wine 
+down_chave=("https://dl.winehq.org/wine-builds/winehq.key")
+chave=(winehq.key)
+repositorio_wine=("deb https://dl.winehq.org/wine-builds/ubuntu/ focal main")
+instalador_wine=("--install-recommends winehq-stable")
+#
+# 06 - Instalar Programas 
+app_install=(arj audacity cabextract cowsay figlet filezilla gconf-service gconf-service-backend gconf2-common gimp git gparted gufw handbrake hardinfo kazam kodi kodi-pvr-iptvsimple kodi-pvr-plutotv kubuntu-restricted-addons kubuntu-restricted-extras  libappindicator1 libatomic1 libc++1 libc++1-10 libc++abi1-10 libc-ares2 libdbusmenu-gtk4 libgconf-2-4 libmediainfo0v5 libpython2-stdlib libpython2.7-minimal libpython2.7-stdlib libzen0v5 lollypop lunzip lutris lzip mpack neofetch oracle-java15-installer oracle-java15-set-default p7zip p7zip-rar plzip python-is-python2 python2 python2-minimal python2.7 python2.7-minimal qbittorrent rar retroarch* samba sharutils simplescreenrecorder snapd software-properties-common synaptic telegram-desktop toilet transmission unace unrar uudeview zsh)
+#
+# 07 - Remover Programas 
+remover_programas=(elisa kmahjongg kmines konversation kpat ksudoku ktorrent libreoffice skanlite)   
+#
+# 08 - Repositórios PPAs
+ppa_lutris="ppa:lutris-team/lutris"
+ppa_retroarch="ppa:libretro/stable"
+ppa_kodi="ppa:team-xbmc/ppa"
+ppa_java="ppa:linuxuprising/java"
+#
+# 09 - Travas do LOCK 
+lock_apt1="/var/lib/dpkg/lock-frontend"
+lock_apt2="/var/cache/apt/archives/lock"
+lock_apt3="/var/lib/apt/lists/lock"
+lock_apt4="sudo rm /var/lib/dpkg/lock"
 # ------------------------------------------------------------#
-# --------------------ÍNICIO DO SCRIPT------------------------#
+# -----------------Ínicio do Código---------------------------#
+# ------------------------------------------------------------#
+#
+# Tempo de espera na tela em segundos. 
 TIME=2
-#Adicionando suporte a arquitetura em 32bits.
-    echo "Vamos adicionar o suporte a 32bits"
-    echo "Aguarde"
-    sleep $TIME
-    echo "Adicionando suporte a arquitetura em 32bits"
-    sudo ${suporte[@]}
-    clear
-
-#Instalando Wine 
-    echo "Fazendo download da chave direto do site do wine"
-    sleep $TIME
-    wget -nc  ${down_chave[@]}
-    echo "Adicionando a chave no sistema"
-    sleep $TIME
-    sudo apt-key add ${chave[@]}
-    clear
-    echo " Adicionando o repositório do wine no linux"
-    sleep $TIME  
-   sudo apt-add-repository -r "$repo_wine" -y
-   echo "Feito esta instalado o repositório!"
-   clear
-
-#Atualizar o sistema
-
-sudo apt update 
+#
+# 09 - Removendo travas do lock.
+echo "Removendo travas eventuais..."
+sleep $TIME
+sudo rm $lock_apt1
+sudo rm $lock_apt2
+sudo rm $lock_apt3
+sudo rm $lock_apt4
+echo "Pronto, removidos as travas."
+sleep $TIME
 clear
-
-#Adicionando PPAs no sistema
-
-sudo apt-add-repository    ${ppa_retroarch[@]} -y 
-sudo apt-add-repository    ${ppa_lutris[@]} -y 
-sudo apt-add-repository    ${ppa_kodi[@]} -y 
-sudo apt-add-repository    ${ppa_java[@]} -y 
-
-#Atualizando ppas
-
+#
+# 07 - Remover Programas.
+echo "Removendo Programas Listados..."
+        echo
+        sleep $TIME
+        echo " Iniciando a remoção dos programas"
+        for nome_do_programa in ${remover_programas[@]}; do 
+            if ! dpkg -l | grep -q $nome_do_programa; then 
+            sudo apt purge  "$nome_do_programa" -y          
+        else 
+            echo "[Lista dos programas removidos] -  $nome_do_programa"
+            
+       fi 
+done
+#
+# 00 - Limpar sistema.
+sudo apt autoremove 
+sudo apt autoclean
+sudo apt clean
+#
+# 01 - Adicionando suporte a arquitetura em 32bits.
+echo "Adicionando suporte a arquitetura em 32bits"
+sleep $TIME
+sudo ${arquitetura[@]}
+echo "Pronto"
+#
+# 08 - Instalando programas via PPAs
+sudo apt-add-repository ${ppa_retroarch[@]} -y 
+sudo apt-add-repository ${ppa_lutris[@]} -y 
+sudo apt-add-repository ${ppa_kodi[@]} -y 
+sudo apt-add-repository ${ppa_java[@]} -y 
+#
+# 00 - Atualizar Sistema.
 sudo apt update
-clear
-
-# Instalando Programas via Wget  
 #
-    #Instalando todos os programas .deb
-mkdir "$diretorio_arquivos_deb"
-wget -c "${downloads[@]}" -P "$diretorio_arquivos_deb"
-cd $HOME/programas_do_script_pos_install
-sudo dpkg -i *.deb
-sudo apt install -f -y 
-cd $HOME/
-sudo rm -rf $HOME/programas_do_script_pos_install
-
-##---------------------------------------------------##
-#
-# Instalando LibreOffice 7.1 e o Vagrant 
-#
-   # Criando diretório e fazendo download para dentro da pasta
-mkdir "$diretorio_compactados_zip"
-cd $HOME/programas_do_script_compactados_pos_install
-wget -c "${vagrant[@]}" -P "$diretorio_compactados_zip"
-wget -c "${libre[@]}" -P "$diretorio_compactados_zip"
-wget -c "${libre_tradutor[@]}" -P "$diretorio_compactados_zip"
-wget -c "${libre_help[@]}" -P "$diretorio_compactados_zip"
-   # Extraindo os arquivos do conteúdo zipado
-unzip  $HOME/programas_do_script_compactados_pos_install/*.zip
-tar -xzf LibreOffice_7.1.0_Linux_x86-64_deb.tar.gz 
-tar -xzf LibreOffice_7.1.0_Linux_x86-64_deb_langpack_pt-BR.tar.gz
-tar -xzf LibreOffice_7.1.0_Linux_x86-64_deb_helppack_pt-BR.tar.gz
-   # Instalando o LibreOffice 7.1
-cd $HOME/programas_do_script_compactados_pos_install/
-cd LibreOffice_7.1.0.3_Linux_x86-64_deb/DEBS/
-sudo dpkg -i *.deb
-   # Instalando o pacote de idiomas em português 
-cd $HOME/programas_do_script_compactados_pos_install 
-cd LibreOffice_7.1.0.3_Linux_x86-64_deb_langpack_pt-BR/DEBS
-sudo dpkg -i *.deb
-   # Instalando Pacote de Ajuda em Português 
-cd $HOME/programas_do_script_compactados_pos_install 
-cd LibreOffice_7.1.0.3_Linux_x86-64_deb_helppack_pt-BR/DEBS
-sudo dpkg -i *.deb
-   # Removendo pasta que contém os arquivos.
-sudo rm -rf "${diretorio_compactados_zip[@]}"
-
-##---------------------------------------------------##
-#
-# Instalando aplicativos APT
+# 06 - Instalar Programas
 echo "Instalando programas em APT listados..."
         echo
         sleep $TIME
         echo " Iniciando a instalação dos programas"
-        for nome_app in ${app_install[@]}; do 
-            if ! dpkg -l | grep -q $nome_app; then 
-            sudo apt install  "$nome_app" -y 
-            
+        for instalando_programa in ${app_install[@]}; do 
+            if ! dpkg -l | grep -q $instalando_programa; then 
+
+            sudo apt install "$instalando_programa" -y
         else 
-            echo "[INSTALADO] -  $nome_app"
+            echo "[Instalado estes programas ao lado =>] -  $instalando_programa"
        fi 
 done
-
-# Removendo aplicativos do sistema 
-echo "Removendo programas desnecessários..."
-        echo
-        sleep $TIME
-        echo " Iniciando a remoção de programas"
-        for nome_app in ${app_remover[@]}; do 
-            if ! dpkg -l | grep -q $nome_app; then 
-            sudo apt purge  "$nome_app" -y 
-            
-        else 
-            echo "[REMOVIDO] -  $nome_app"
-        fi 
-done
+#
+# 03 - Baixando programas .DEB pela internet 
+mkdir "$diretorio_deb"
+wget -c "${downloads_deb[@]}" -P "$diretorio_deb"
+cd $HOME/programas_deb
+sudo dpkg -i *.deb
+cd $HOME/
+sudo rm -rf $HOME/programas_deb
+#
+# 05 - Instalando Wine 
+echo "Baixando chave do wine"
+sleep $TIME
+wget -nc  ${down_chave[@]}
+echo "Adicionando a chave no sistema"
+sleep $TIME
+sudo apt-key add ${chave[@]}
+sudo rm winehq.key
+clear
+echo " Adicionando o repositório do wine no linux"
+sudo apt-add-repository "$repositorio_wine" -y
+sudo apt update
+sudo apt install $instalador_wine -y 
+echo "Feito esta instalado o repositório!"
+#
+# 04 - Instalando o LibreOffice
+mkdir "$diretorio_compactados_zip"
+#wget -c "${vagrant[@]}" -P "$diretorio_zip"
+wget -c "${libre[@]}" -P "$diretorio_zip"
+wget -c "${libre_tradutor[@]}" -P "$diretorio_zip"
+wget -c "${libre_help[@]}" -P "$diretorio_zip"
+cd $HOME/programas_zip
+# Extraindo Vagrant
+#unzip *.zip 
+#unzip  $HOME/programas_do_script_compactados_pos_install/*.zip
+tar -xzf LibreOffice_7.1.0_Linux_x86-64_deb.tar.gz 
+tar -xzf LibreOffice_7.1.0_Linux_x86-64_deb_langpack_pt-BR.tar.gz
+tar -xzf LibreOffice_7.1.0_Linux_x86-64_deb_helppack_pt-BR.tar.gz
+# Instalando o LibreOffice 7.1
+cd LibreOffice_7.1.0.3_Linux_x86-64_deb/DEBS/
+sudo dpkg -i *.deb
+# Instalando o pacote de idiomas em português 
+cd $HOME/diretorio_zip 
+cd LibreOffice_7.1.0.3_Linux_x86-64_deb_langpack_pt-BR/DEBS
+sudo dpkg -i *.deb
+# Instalando Pacote de Ajuda em Português 
+cd $HOME/diretorio_zip
+cd LibreOffice_7.1.0.3_Linux_x86-64_deb_helppack_pt-BR/DEBS
+sudo dpkg -i *.deb
+# Removendo pasta que contém os arquivos.
+cd $HOME/
+sudo rm -rf "${diretorio_zip[@]}"
+#
 # Limpando o sistema
-
 sudo apt autoremove -y 
 sudo apt clean 
 sudo apt autoclean 
 sudo apt clean
+#
+# Finalizado 
+sleep $TIME
+echo " Acabou "
+sleep $TIME
+# ------------------------------------------------------------#
+# --------------------Fim do Código---------------------------#
+# ------------------------------------------------------------#
+
