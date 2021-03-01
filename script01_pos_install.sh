@@ -36,7 +36,7 @@ downloads_deb=(
     "https://mega.nz/linux/MEGAsync/xUbuntu_20.04/amd64/megasync-xUbuntu_20.04_amd64.deb"
     "https://mega.nz/linux/MEGAsync/xUbuntu_20.04/amd64/dolphin-megasync-xUbuntu_20.04_amd64.deb"
     "https://dl.discordapp.net/apps/linux/0.0.13/discord-0.0.13.deb"
-    "https://downloads.vivaldi.com/stable/vivaldi-stable_3.6.2165.40-1_amd64.deb"
+    #"https://downloads.vivaldi.com/stable/vivaldi-stable_3.6.2165.40-1_amd64.deb"
     "https://download.virtualbox.org/virtualbox/6.1.18/virtualbox-6.1_6.1.18-142142~Ubuntu~eoan_amd64.deb"
     "https://sonik.dl.sourceforge.net/project/stacer/v1.1.0/stacer_1.1.0_amd64.deb"
     "https://az764295.vo.msecnd.net/stable/622cb03f7e070a9670c94bae1a45d78d7181fbd4/code_1.53.2-1613044664_amd64.deb"
@@ -56,7 +56,7 @@ repositorio_wine=("deb https://dl.winehq.org/wine-builds/ubuntu/ focal main")
 instalador_wine=("--install-recommends winehq-stable")
 #
 # 06 - Instalar Programas 
-app_install=(arj audacity cabextract cowsay figlet filezilla gconf-service gconf-service-backend gconf2-common gimp git gparted gufw handbrake hardinfo kazam kodi kodi-pvr-iptvsimple kodi-pvr-plutotv kubuntu-restricted-addons kubuntu-restricted-extras  libappindicator1 libatomic1 libc++1 libc++1-10 libc++abi1-10 libc-ares2 libdbusmenu-gtk4 libgconf-2-4 libmediainfo0v5 libpython2-stdlib libpython2.7-minimal libpython2.7-stdlib libzen0v5 lollypop lunzip lutris lzip mpack neofetch oracle-java15-installer oracle-java15-set-default p7zip p7zip-rar plzip python-is-python2 python2 python2-minimal python2.7 python2.7-minimal qbittorrent rar retroarch* samba sharutils simplescreenrecorder snapd software-properties-common synaptic telegram-desktop toilet transmission unace unrar uudeview zsh)
+app_install=(arj audacity cabextract cowsay figlet filezilla gconf-service gconf-service-backend gconf2-common gimp git gparted gufw handbrake hardinfo kazam kodi kodi-pvr-iptvsimple kodi-pvr-plutotv kubuntu-restricted-addons kubuntu-restricted-extras  libappindicator1 libatomic1 libc++1 libc++1-10 libc++abi1-10 libc-ares2 libdbusmenu-gtk4 libgconf-2-4 libmediainfo0v5 libpython2-stdlib libpython2.7-minimal qt5-style-kvantum qt5-style-kvantum-themes libpython2.7-stdlib libzen0v5 lollypop lunzip lutris lzip mpack neofetch oracle-java15-installer oracle-java15-set-default p7zip p7zip-rar plzip python-is-python2 python2 python2-minimal python2.7 python2.7-minimal qbittorrent rar retroarch* samba sharutils simplescreenrecorder snapd software-properties-common synaptic telegram-desktop toilet transmission unace unrar uudeview zsh)
 #
 # 07 - Remover Programas 
 remover_programas=(elisa* kmahjongg* kmines* konversation* kpat* ksudoku* ktorrent* libreoffice* skanlite*)   
@@ -66,6 +66,7 @@ ppa_lutris="ppa:lutris-team/lutris"
 ppa_retroarch="ppa:libretro/stable"
 ppa_kodi="ppa:team-xbmc/ppa"
 ppa_java="ppa:linuxuprising/java"
+ppa_kvantum="ppa:papirus/papirus"
 #
 # 09 - Travas do LOCK 
 lock_apt1="/var/lib/dpkg/lock-frontend"
@@ -120,6 +121,7 @@ sudo apt-add-repository ${ppa_retroarch[@]} -y
 sudo apt-add-repository ${ppa_lutris[@]} -y 
 sudo apt-add-repository ${ppa_kodi[@]} -y 
 sudo apt-add-repository ${ppa_java[@]} -y 
+sudo apt-add-repository ${ppa_kvantum[@]} -y
 #
 # 00 - Atualizar Sistema.
 sudo apt update
