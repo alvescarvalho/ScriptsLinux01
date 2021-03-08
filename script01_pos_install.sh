@@ -56,9 +56,11 @@ repositorio_wine=("deb https://dl.winehq.org/wine-builds/ubuntu/ focal main")
 instalador_wine=("--install-recommends winehq-stable")
 #
 # 06 - Instalar Programas 
-app_install=(arj audacity cabextract cowsay figlet filezilla gconf-service gconf-service-backend gconf2-common gimp git gparted gufw handbrake hardinfo kazam kodi kodi-pvr-iptvsimple kodi-pvr-plutotv kubuntu-restricted-addons kubuntu-restricted-extras  libappindicator1 libatomic1 libc++1 libc++1-10 libc++abi1-10 libc-ares2 libdbusmenu-gtk4 libgconf-2-4 libmediainfo0v5 libpython2-stdlib libpython2.7-minimal qt5-style-kvantum qt5-style-kvantum-themes libpython2.7-stdlib libzen0v5 lollypop lunzip lutris lzip mpack neofetch oracle-java15-installer oracle-java15-set-default p7zip p7zip-rar plzip python-is-python2 python2 python2-minimal python2.7 python2.7-minimal qbittorrent rar retroarch* samba sharutils simplescreenrecorder snapd software-properties-common synaptic telegram-desktop toilet transmission unace unrar uudeview zsh)
+#kodi kodi-pvr-iptvsimple kodi-pvr-plutotv retroarch*
+app_install=(arj audacity cabextract cowsay figlet filezilla gconf-service gconf-service-backend gconf2-common gimp git gparted clementine gufw handbrake hardinfo kazam kubuntu-restricted-addons kubuntu-restricted-extras  libappindicator1 libatomic1 libc++1 libc++1-10 libc++abi1-10 libc-ares2 libdbusmenu-gtk4 libgconf-2-4 libmediainfo0v5 libpython2-stdlib libpython2.7-minimal qt5-style-kvantum qt5-style-kvantum-themes libpython2.7-stdlib libzen0v5 lollypop lunzip lutris lzip mpack neofetch oracle-java15-installer oracle-java15-set-default p7zip p7zip-rar plzip python-is-python2 python2 python2-minimal python2.7 python2.7-minimal qbittorrent rar  samba sharutils simplescreenrecorder snapd software-properties-common synaptic telegram-desktop toilet transmission unace unrar uudeview zsh
+)
 #
-# 07 - Remover Programas 
+# 07 - Remover Programas
 remover_programas=(elisa* kmahjongg* kmines* konversation* kpat* ksudoku* ktorrent* libreoffice* skanlite*)   
 #
 # 08 - Repositórios PPAs
@@ -67,6 +69,7 @@ ppa_retroarch="ppa:libretro/stable"
 ppa_kodi="ppa:team-xbmc/ppa"
 ppa_java="ppa:linuxuprising/java"
 ppa_kvantum="ppa:papirus/papirus"
+
 #
 # 09 - Travas do LOCK 
 lock_apt1="/var/lib/dpkg/lock-frontend"
