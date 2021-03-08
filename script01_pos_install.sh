@@ -3,11 +3,11 @@
 # Nome:          script01_pos_install.sh 
 # Descrição:     Automação de pós instalação do Kubntu 20.04.
 # Linkedin:      www.linkedin.com/in/mateusalvescf
-# Escrito por:   Mateus Carvalho 
-# Última edicão feita por: Mateus Carvalho 
+# Escrito por:   Mateus Alves 
+# Última edicão feita por: Mateus Alves 
 # ------------------------------------------------------------#
 # Como usar o script:         
-#       $ ./atualiza_sistema.sh
+#       $ ./script01_pos_install.sh
 # ------------------------------------------------------------#
 # Bash Version:  
 #              Bash 5.0.17
@@ -76,6 +76,10 @@ lock_apt1="/var/lib/dpkg/lock-frontend"
 lock_apt2="/var/cache/apt/archives/lock"
 lock_apt3="/var/lib/apt/lists/lock"
 lock_apt4="/var/lib/dpkg/lock"
+
+# 10 - Instalando aplicativos snaps
+snap_install=(figma-linux )
+
 # ------------------------------------------------------------#
 # -----------------Ínicio do Código---------------------------#
 # ------------------------------------------------------------#
