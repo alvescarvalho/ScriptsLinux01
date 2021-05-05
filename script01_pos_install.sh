@@ -39,36 +39,37 @@ downloads_deb=(
     #"https://downloads.vivaldi.com/stable/vivaldi-stable_3.6.2165.40-1_amd64.deb"
     "https://download.virtualbox.org/virtualbox/6.1.18/virtualbox-6.1_6.1.18-142142~Ubuntu~eoan_amd64.deb"
     "https://sonik.dl.sourceforge.net/project/stacer/v1.1.0/stacer_1.1.0_amd64.deb"
-    "https://az764295.vo.msecnd.net/stable/622cb03f7e070a9670c94bae1a45d78d7181fbd4/code_1.53.2-1613044664_amd64.deb"
-    "https://github.com/shiftkey/desktop/releases/download/release-2.6.3-linux1/GitHubDesktop-linux-2.6.3-linux1.deb"
+    "https://az764295.vo.msecnd.net/stable/3c4e3df9e89829dce27b7b5c24508306b151f30d/code_1.55.2-1618307277_amd64.deb"
+    "https://github.com/shiftkey/desktop/releases/download/release-2.8.0-linux1/GitHubDesktop-linux-2.8.0-linux1.deb"
+    "https://repo.steampowered.com/steam/archive/precise/steam_latest.deb"
 )
 #
 # 04 - Downloads Externos Compactados 
+ libre=("https://mirror.turbozoneinternet.net.br/tdf/libreoffice/stable/7.1.2/deb/x86_64/LibreOffice_7.1.2_Linux_x86-64_deb.tar.gz")
+ libre_help=("https://tdf.c3sl.ufpr.br/libreoffice/stable/7.1.2/deb/x86_64/LibreOffice_7.1.2_Linux_x86-64_deb_helppack_pt-BR.tar.gz")
+ libre_tradutor=("http://mirror.pop-sc.rnp.br/mirror/tdf/libreoffice/stable/7.1.2/deb/x86_64/LibreOffice_7.1.2_Linux_x86-64_deb_langpack_pt-BR.tar.gz")   
  #vagrant=("https://releases.hashicorp.com/vagrant/2.2.14/vagrant_2.2.14_linux_amd64.zip")
- libre=("https://mirror.turbozoneinternet.net.br/tdf/libreoffice/stable/7.1.0/deb/x86_64/LibreOffice_7.1.0_Linux_x86-64_deb.tar.gz")
- libre_tradutor=("https://mirror.nbtelecom.com.br/tdf/libreoffice/stable/7.1.0/deb/x86_64/LibreOffice_7.1.              0_Linux_x86-64_deb_langpackpt-BR.tar.gz")   
- libre_help=("http://mirror.ufms.br/tdf/libreoffice/stable/7.1.0/deb/x86_64/LibreOffice_7.1.0_Linux_x86-64_deb_helppack_pt-BR.tar.gz")
+
 #
 # 05 - Downloads do Wine 
-down_chave=("https://dl.winehq.org/wine-builds/winehq.key")
 chave=(winehq.key)
-repositorio_wine=("deb https://dl.winehq.org/wine-builds/ubuntu/ focal main")
+down_chave=("https://dl.winehq.org/wine-builds/winehq.key")
 instalador_wine=("--install-recommends winehq-stable")
+repositorio_wine=("deb https://dl.winehq.org/wine-builds/ubuntu/ focal main")
 #
-# 06 - Instalar Programas 
-#kodi kodi-pvr-iptvsimple kodi-pvr-plutotv retroarch*
-app_install=(arj audacity cabextract cowsay figlet filezilla gconf-service gconf-service-backend gconf2-common gimp git gparted clementine gufw handbrake hardinfo kazam kubuntu-restricted-addons kubuntu-restricted-extras  libappindicator1 libatomic1 libc++1 libc++1-10 libc++abi1-10 libc-ares2 libdbusmenu-gtk4 libgconf-2-4 libmediainfo0v5 libpython2-stdlib libpython2.7-minimal qt5-style-kvantum qt5-style-kvantum-themes libpython2.7-stdlib libzen0v5 lollypop lunzip lutris lzip mpack neofetch oracle-java15-installer oracle-java15-set-default p7zip p7zip-rar plzip python-is-python2 python2 python2-minimal python2.7 python2.7-minimal qbittorrent rar  samba sharutils simplescreenrecorder snapd software-properties-common synaptic telegram-desktop toilet transmission unace unrar uudeview zsh
+# 06 - Instalar Programas via APT
+app_install=(arj cabextract clementine cowsay figlet filezilla gconf-service gconf-service-backend gconf2-common gimp git gparted gufw 
+hardinfo kubuntu-restricted-addons kubuntu-restricted-extras libappindicator1 libatomic1 libc++1 libc++1-10 libc++abi1-10 libc-ares2 libdbusmenu-gtk4 libgconf-2-4 libmediainfo0v5 libpython2-stdlib libpython2.7-minimal libpython2.7-stdlib libzen0v5 lollypop lunzip lutris lzip mpack neofetch oracle-java16-installer oracle-java16-set-default p7zip p7zip-rar plzip python-is-python2 python2 python2-minimal python2.7 python2.7-minimal qbittorrent qt5-style-kvantum qt5-style-kvantum-themes rar retroarch* samba sharutils simplescreenrecorder snapd software-properties-common synaptic telegram-desktop toilet transmission unace unrar uudeview zsh
 )
 #
-# 07 - Remover Programas
+# 07 - Remover Programas via APT
 remover_programas=(elisa* kmahjongg* kmines* konversation* kpat* ksudoku* ktorrent* libreoffice* skanlite*)   
 #
 # 08 - Repositórios PPAs
-ppa_lutris="ppa:lutris-team/lutris"
-ppa_retroarch="ppa:libretro/stable"
-ppa_kodi="ppa:team-xbmc/ppa"
 ppa_java="ppa:linuxuprising/java"
 ppa_kvantum="ppa:papirus/papirus"
+ppa_lutris="ppa:lutris-team/lutris"
+ppa_retroarch="ppa:libretro/stable"
 
 #
 # 09 - Travas do LOCK 
@@ -152,6 +153,7 @@ mkdir "$diretorio_deb"
 wget -c "${downloads_deb[@]}" -P "$diretorio_deb"
 cd $HOME/programas_deb
 sudo dpkg -i *.deb
+sudo apt install -f
 cd $HOME/
 sudo rm -rf $HOME/programas_deb
 #
@@ -171,31 +173,32 @@ sudo apt install $instalador_wine -y
 echo "Feito esta instalado o repositório!"
 #
 # 04 - Baixando o  Vagrant 
+#mkdir "$diretorio_zip"
 #wget -c "${vagrant[@]}" -P "$diretorio_zip"
+#cd $HOME/programas_zip
+# Extraindo Vagrant
+#unzip *.zip 
 
 # 04 - Instalando o LibreOffice
-mkdir "$diretorio_zip"
+mkdir "$diretorio_zip" 
 wget -c "${libre[@]}" -P "$diretorio_zip"
 wget -c "${libre_tradutor[@]}" -P "$diretorio_zip"
 wget -c "${libre_help[@]}" -P "$diretorio_zip"
 cd $HOME/programas_zip
-# Extraindo Vagrant
-#unzip *.zip 
-tar -xzf LibreOffice_7.1.0_Linux_x86-64_deb.tar.gz 
-tar -xzf LibreOffice_7.1.0_Linux_x86-64_deb_langpack_pt-BR.tar.gz
-tar -xzf LibreOffice_7.1.0_Linux_x86-64_deb_helppack_pt-BR.tar.gz
-#unzip *.zip 
-#unzip  $HOME/programas_do_script_compactados_pos_install/*.zip
+tar -xzf LibreOffice_7.1.2_Linux_x86-64_deb.tar.gz 
+tar -xzf LibreOffice_7.1.2_Linux_x86-64_deb_langpack_pt-BR.tar.gz
+tar -xzf LibreOffice_7.1.2_Linux_x86-64_deb_helppack_pt-BR.tar.gz
+ 
 # Instalando o LibreOffice 7.1
-cd LibreOffice_7.1.0.3_Linux_x86-64_deb/DEBS/
+cd LibreOffice_7.1.2.2_Linux_x86-64_deb/DEBS/
 sudo dpkg -i *.deb
-# Instalando o pacote de idiomas em português 
-cd $HOME/programas_zip 
-cd LibreOffice_7.1.0.3_Linux_x86-64_deb_langpack_pt-BR/DEBS/
-sudo dpkg -i *.deb
-# Instalando Pacote de Ajuda em Português 
 cd $HOME/programas_zip
-cd LibreOffice_7.1.0.3_Linux_x86-64_deb_helppack_pt-BR/DEBS/
+# Instalando o pacote de idiomas em português 
+cd LibreOffice_7.1.2.2_Linux_x86-64_deb_langpack_pt-BR/DEBS/
+sudo dpkg -i *.deb
+cd $HOME/programas_zip 
+# Instalando Pacote de Ajuda em Português 
+cd LibreOffice_7.1.2.2_Linux_x86-64_deb_helppack_pt-BR/DEBS/
 sudo dpkg -i *.deb
 # Removendo pasta que contém os arquivos.
 cd $HOME/
